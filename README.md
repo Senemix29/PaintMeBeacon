@@ -1,3 +1,5 @@
-<h1>TesteBeacons</h1>
-Repository to learn more about Beacons, from Estimote Android-SDK.
+<h1>Paint me Beacon!</h1>
+An App to change the background of the activity according to the proximity of a Estimote iBeacon.
+
+
 
