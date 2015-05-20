@@ -1,9 +1,11 @@
 package estudo.com.br.testebeacons;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.RemoteException;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.androidannotations.annotations.EActivity;
@@ -12,6 +14,8 @@ import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
 import com.estimote.sdk.EstimoteSDK;
 import com.estimote.sdk.Region;
+import com.estimote.sdk.Utils;
+
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -35,6 +39,9 @@ private static final Region BLUEBERRY_ESTIMOTE_BEACONS = new Region("regionId",E
     @ViewById(R.id.txBeaconMint)
     TextView txBeaconMint;
 
+    @ViewById(R.id.LinearLayout1)
+    LinearLayout activity_main;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,12 +51,12 @@ private static final Region BLUEBERRY_ESTIMOTE_BEACONS = new Region("regionId",E
         beaconManager.setMonitoringListener(new BeaconManager.MonitoringListener() {
             @Override
             public void onEnteredRegion(Region region, List<Beacon> beacons) {
-                txBeaconIce.setText("Ice");
+                activity_main.setBackgroundColor(Color.parseColor("#08F0E0"));
             }
 
             @Override
             public void onExitedRegion(Region region) {
-                txBeaconIce.setText("No beacons here");
+                activity_main.setBackgroundColor(0xFFFFFF);
             }
         }
 
@@ -57,23 +64,23 @@ private static final Region BLUEBERRY_ESTIMOTE_BEACONS = new Region("regionId",E
         beaconManager2.setMonitoringListener(new BeaconManager.MonitoringListener() {
              @Override
              public void onEnteredRegion(Region region, List<Beacon> beacons) {
-                 txBeaconMint.setText("Mint");
+                 activity_main.setBackgroundColor(Color.parseColor("#A2F008"));
              }
 
              @Override
              public void onExitedRegion(Region region) {
-                 txBeaconMint.setText("No beacons here");
+                 activity_main.setBackgroundColor(0xFFFFFF);
              }
          });
         beaconManager3.setMonitoringListener(new BeaconManager.MonitoringListener() {
             @Override
             public void onEnteredRegion(Region region, List<Beacon> beacons) {
-                txBeaconBlueberry.setText("Blueberry");
+                activity_main.setBackgroundColor(Color.parseColor("#9708F0"));
             }
 
             @Override
             public void onExitedRegion(Region region) {
-                txBeaconBlueberry.setText("No beacons here");
+                activity_main.setBackgroundColor(0xFFFFFF);
             }
         });
     }
