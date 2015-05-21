@@ -47,6 +47,7 @@ private static final Region BLUEBERRY_ESTIMOTE_BEACONS = new Region("regionId",E
         super.onCreate(savedInstanceState);
         EstimoteSDK.initialize(this, "app_0x92ljsn74","4777d092bdafa5bfa4aa6dc92766a3b8");
         EstimoteSDK.enableDebugLogging(true);
+
         beaconManager.setBackgroundScanPeriod(TimeUnit.SECONDS.toMillis(0), 0);
         beaconManager.setMonitoringListener(new BeaconManager.MonitoringListener() {
             @Override
