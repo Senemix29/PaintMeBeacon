@@ -15,6 +15,7 @@
         android:layout_alignEnd="@+id/txBeaconMint"
         android:layout_marginTop="188dp" />
     <TextView
+        android:text="@string/flavor"
         android:id="@+id/txBeaconMint"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -45,6 +45,15 @@ private static final Region ALL_ESTIMOTE_BEACONS = new Region("regionId", ESTIMO
     @ViewById(R.id.LinearLayout1)
     LinearLayout activity_main;
 
+    @ViewById(R.string.flavor)
+    String flavor;
+    @ViewById(R.string.ice)
+    String ice;
+    @ViewById(R.string.mint)
+    String mint;
+    @ViewById(R.string.blueberry)
+    String blueberry;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,6 +131,7 @@ private static final Region ALL_ESTIMOTE_BEACONS = new Region("regionId", ESTIMO
             }
         });
     }
+
     public void beaconMonitoring(){
 
         beaconManager1.setBackgroundScanPeriod(TimeUnit.SECONDS.toMillis(0), 0);
@@ -132,12 +142,12 @@ private static final Region ALL_ESTIMOTE_BEACONS = new Region("regionId", ESTIMO
              @Override
              public void onEnteredRegion(Region region, List<Beacon> beacons) {
                  activity_main.setBackgroundColor(Color.parseColor("#08F0E0"));
+                 txBeaconMint.setText(flavor + ice);
                  Log.d("EstimoTest", "Inside of Region 1");
              }
 
              @Override
              public void onExitedRegion(Region region) {
-                 activity_main.setBackgroundColor(0xFFFFFF);
                  Log.d("EstimoTest", "Out of Region 1");
              }
         }
@@ -146,25 +156,26 @@ private static final Region ALL_ESTIMOTE_BEACONS = new Region("regionId", ESTIMO
             @Override
             public void onEnteredRegion(Region region, List<Beacon> beacons) {
                 activity_main.setBackgroundColor(Color.parseColor("#A2F008"));
+                txBeaconMint.setText(flavor + mint);
                 Log.d("EstimoTest", "Inside of Region 2");
             }
 
             @Override
             public void onExitedRegion(Region region) {
-                activity_main.setBackgroundColor(0xFFFFFF);
                 Log.d("EstimoTest", "Out of Region 2");
+
             }
         });
         beaconManager3.setMonitoringListener(new BeaconManager.MonitoringListener() {
             @Override
             public void onEnteredRegion(Region region, List<Beacon> beacons) {
                 activity_main.setBackgroundColor(Color.parseColor("#9708F0"));
+                txBeaconMint.setText(flavor+blueberry);
                 Log.d("EstimoTest", "Inside of Region 3");
             }
 
             @Override
             public void onExitedRegion(Region region) {
-                activity_main.setBackgroundColor(0xFFFFFF);
                 Log.d("EstimoTest", "Out of Region 3");
             }
         });
