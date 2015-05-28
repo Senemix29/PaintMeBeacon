@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.RemoteException;
 import android.os.Bundle;
+import android.support.annotation.StringRes;
 import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -27,6 +28,10 @@ private BeaconManager beaconManager1 = new BeaconManager(this);
 private BeaconManager beaconManager2 = new BeaconManager(this);
 private BeaconManager beaconManager3 = new BeaconManager(this);
 private BeaconManager beaconManager = new BeaconManager(this);
+private static final String ice="ice";
+private static final String mint="mint";
+private static final String blueberry="blueberry";
+private static final String flavor="Flavor: ";
 private static final String ESTIMOTE_PROXIMITY_UUID = "B9407F30-F5F8-466E-AFF9-25556B57FE6D";
 private static final Region ICE_ESTIMOTE_BEACONS = new Region("region1",ESTIMOTE_PROXIMITY_UUID,59941,46227);
 private static final Region MINT_ESTIMOTE_BEACONS = new Region("region2",ESTIMOTE_PROXIMITY_UUID,8238,38423);
@@ -45,14 +50,7 @@ private static final Region ALL_ESTIMOTE_BEACONS = new Region("regionId", ESTIMO
     @ViewById(R.id.LinearLayout1)
     LinearLayout activity_main;
 
-    @ViewById(R.string.flavor)
-    String flavor;
-    @ViewById(R.string.ice)
-    String ice;
-    @ViewById(R.string.mint)
-    String mint;
-    @ViewById(R.string.blueberry)
-    String blueberry;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +92,7 @@ private static final Region ALL_ESTIMOTE_BEACONS = new Region("regionId", ESTIMO
         beaconManager2.disconnect();
         beaconManager3.disconnect();
     }
+
     public void beaconStart(){
         beaconManager1.connect(new BeaconManager.ServiceReadyCallback() {
             @Override
