@@ -6,11 +6,10 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.RemoteException;
 import android.os.Bundle;
-import android.support.annotation.StringRes;
+import org.androidannotations.annotations.res.StringRes;
 import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 import com.estimote.sdk.Beacon;
@@ -20,6 +19,9 @@ import com.estimote.sdk.Region;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 @EActivity(R.layout.activity_main)
 public class MainActivity extends Activity {
@@ -31,12 +33,13 @@ private BeaconManager beaconManager = new BeaconManager(this);
 private static final String ice="ice";
 private static final String mint="mint";
 private static final String blueberry="blueberry";
-private static final String flavor="Flavor: ";
+private static final String TAG="Estimotest";
+//private static final String flavor="Flavor: ";
+private static final int REQUEST_ENABLE_BT = 1234;
 private static final String ESTIMOTE_PROXIMITY_UUID = "B9407F30-F5F8-466E-AFF9-25556B57FE6D";
 private static final Region ICE_ESTIMOTE_BEACONS = new Region("region1",ESTIMOTE_PROXIMITY_UUID,59941,46227);
 private static final Region MINT_ESTIMOTE_BEACONS = new Region("region2",ESTIMOTE_PROXIMITY_UUID,8238,38423);
 private static final Region BLUEBERRY_ESTIMOTE_BEACONS = new Region("region3",ESTIMOTE_PROXIMITY_UUID,28222,19199);
-private static final Region ALL_ESTIMOTE_BEACONS = new Region("regionId", ESTIMOTE_PROXIMITY_UUID,null,null);
 
     @ViewById(R.id.txBeaconBlueberry)
     TextView txBeaconBlueberry;
@@ -50,6 +53,8 @@ private static final Region ALL_ESTIMOTE_BEACONS = new Region("regionId", ESTIMO
     @ViewById(R.id.LinearLayout1)
     LinearLayout activity_main;
 
+    @StringRes(R.string.flavor)
+    String flavor;
 
 
     @Override
@@ -65,7 +70,7 @@ private static final Region ALL_ESTIMOTE_BEACONS = new Region("regionId", ESTIMO
         super.onStart();
         if (!beaconManager.isBluetoothEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBtIntent,1234);
+            startActivityForResult(enableBtIntent,REQUEST_ENABLE_BT);
         } else {
             beaconStart();
         }
@@ -80,7 +85,7 @@ private static final Region ALL_ESTIMOTE_BEACONS = new Region("regionId", ESTIMO
             beaconManager3.stopMonitoring(BLUEBERRY_ESTIMOTE_BEACONS);
         }
         catch(RemoteException e){
-            Log.e("EstimoTest","Something went wrong while stopping:",e);
+            Log.e(TAG,"Something went wrong while stopping:",e);
         }
 
     }
@@ -93,15 +98,27 @@ private static final Region ALL_ESTIMOTE_BEACONS = new Region("regionId", ESTIMO
         beaconManager3.disconnect();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode==REQUEST_ENABLE_BT){
+            if(resultCode==Activity.RESULT_OK){
+                beaconStart();
+            }
+            else
+                Log.d(TAG,"Bluetooth is not enabled");
+                Crouton.makeText(MainActivity.this,"Bluetooth is not enabled", Style.ALERT).show();
+        }
+    }
+
     public void beaconStart(){
         beaconManager1.connect(new BeaconManager.ServiceReadyCallback() {
             @Override
             public void onServiceReady() {
                 try {
                     beaconManager1.startMonitoring(ICE_ESTIMOTE_BEACONS);
-                    Log.d("EstimoTest", "beacon Manager 1 has start");
+                    Log.d(TAG, "beacon Manager 1 has start");
                 } catch (RemoteException e) {
-                    Log.e("EstimoTest", "May it's not possible start monitoring because:", e);
+                    Log.e(TAG, "May it's not possible start monitoring because:", e);
                 }
             }
         });
@@ -110,9 +127,9 @@ private static final Region ALL_ESTIMOTE_BEACONS = new Region("regionId", ESTIMO
             public void onServiceReady() {
                 try{
                     beaconManager2.startMonitoring(MINT_ESTIMOTE_BEACONS);
-                    Log.d("EstimoTest", "beacon Manager 2 has start");
+                    Log.d(TAG, "beacon Manager 2 has start");
                 }catch(RemoteException e){
-                    Log.e("EstimoTest", "May it's not possible start monitoring because:", e);
+                    Log.e(TAG, "May it's not possible start monitoring because:", e);
                 }
             }
         });
@@ -121,9 +138,9 @@ private static final Region ALL_ESTIMOTE_BEACONS = new Region("regionId", ESTIMO
             public void onServiceReady() {
                 try{
                     beaconManager3.startMonitoring(BLUEBERRY_ESTIMOTE_BEACONS);
-                    Log.d("EstimoTest", "beacon Manager 3 has start");
+                    Log.d(TAG, "beacon Manager 3 has start");
                 }catch(RemoteException e){
-                    Log.e("EstimoTest", "May it's not possible start monitoring because:", e);
+                    Log.e(TAG, "May it's not possible start monitoring because:", e);
 
 
                 }
@@ -142,27 +159,25 @@ private static final Region ALL_ESTIMOTE_BEACONS = new Region("regionId", ESTIMO
              public void onEnteredRegion(Region region, List<Beacon> beacons) {
                  activity_main.setBackgroundColor(Color.parseColor("#08F0E0"));
                  txBeaconMint.setText(flavor + ice);
-                 Log.d("EstimoTest", "Inside of Region 1");
+                 Log.d(TAG, "Inside of Region 1");
              }
 
              @Override
              public void onExitedRegion(Region region) {
-                 Log.d("EstimoTest", "Out of Region 1");
+                 Log.d(TAG, "Out of Region 1");
              }
-        }
-        );
+        });
         beaconManager2.setMonitoringListener(new BeaconManager.MonitoringListener() {
             @Override
             public void onEnteredRegion(Region region, List<Beacon> beacons) {
                 activity_main.setBackgroundColor(Color.parseColor("#A2F008"));
                 txBeaconMint.setText(flavor + mint);
-                Log.d("EstimoTest", "Inside of Region 2");
+                Log.d(TAG, "Inside of Region 2");
             }
 
             @Override
             public void onExitedRegion(Region region) {
-                Log.d("EstimoTest", "Out of Region 2");
-
+                Log.d(TAG, "Out of Region 2");
             }
         });
         beaconManager3.setMonitoringListener(new BeaconManager.MonitoringListener() {
@@ -170,12 +185,12 @@ private static final Region ALL_ESTIMOTE_BEACONS = new Region("regionId", ESTIMO
             public void onEnteredRegion(Region region, List<Beacon> beacons) {
                 activity_main.setBackgroundColor(Color.parseColor("#9708F0"));
                 txBeaconMint.setText(flavor+blueberry);
-                Log.d("EstimoTest", "Inside of Region 3");
+                Log.d(TAG, "Inside of Region 3");
             }
 
             @Override
             public void onExitedRegion(Region region) {
-                Log.d("EstimoTest", "Out of Region 3");
+                Log.d(TAG, "Out of Region 3");
             }
         });
 
